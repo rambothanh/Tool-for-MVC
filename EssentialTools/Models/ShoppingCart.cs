@@ -7,11 +7,11 @@ namespace EssentialTools.Models
 {
     public class ShoppingCart
     {
-        //Tạo trường kiểu Linq...
-        private LinqValueCalculator cals;
+        //Tạo trường kiểu có Implemention IValueCalculator...
+        private IValueCalculator cals;
         
         //Hàm khởi tạo
-        public ShoppingCart(LinqValueCalculator calcParam)
+        public ShoppingCart(IValueCalculator calcParam)
         {
             cals = calcParam;
         }
