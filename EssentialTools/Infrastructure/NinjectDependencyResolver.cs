@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using EssentialTools.Models;
 using Ninject;
+using Ninject.Web.Common;
 
 namespace EssentialTools.Infrastructure
 {
@@ -25,8 +26,15 @@ namespace EssentialTools.Infrastructure
             return kernel.GetAll(serviceType);
         }
         private void AddBindings()
-        {
-            kernel.Bind<IValueCalculator>().To<LinqValueCalculator>();
+        {   //Phương thức mở rộng InRequestScope,
+            //nằm trong  Ninject.Web.Common,
+            //cho Ninject biết rằng nó chỉ nên tạo một cá thể của lớp
+            //LinqValueCalculator cho mỗi yêu cầu HTTP mà ASP.NET nhận được.
+            kernel.Bind<IValueCalculator>().To<LinqValueCalculator>().InRequestScope();
+            kernel.Bind<IDiscountHelper>().To<DefaultDiscountHelper>()
+                .WithConstructorArgument("discountParam", 50M);
+            kernel.Bind<IDiscountHelper>().To<FlexibleDiscountHelper>()
+                .WhenInjectedInto<LinqValueCalculator>();
         }
 
     }
